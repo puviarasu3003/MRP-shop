@@ -1,0 +1,8 @@
+{
+  "liveServer.settings.port": 5507,
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "use_cache": true
+  }
+}
