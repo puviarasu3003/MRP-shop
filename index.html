@@ -2581,6 +2581,16 @@
             state.auth.session = session || null;
             await refreshCustomerProfile(user.id);
             subscribeToOrders();
+            if (routeState.name === "auth") {
+              if (postAuthRedirect) {
+                const dest = postAuthRedirect.name;
+                const params = postAuthRedirect.params;
+                postAuthRedirect = null;
+                go(dest, params, { replace: true });
+              } else {
+                go("home", {}, { replace: true });
+              }
+            }
           }
         });
       }
@@ -4540,10 +4550,13 @@
        ============================================================ */
       register("orderconfirm", (p = {}) => {
         const id = p.id || (state.lastOrder && state.lastOrder.id);
+        const cachedOrder = state.orderHistory.find(o => String(o.id) === String(id));
+        const order = state.lastOrder || cachedOrder;
         const isPaid =
-          (state.lastOrder && state.lastOrder.payment_status === "paid") ||
-          (state.lastOrder && state.lastOrder.payment_method === "razorpay");
-        const phone = state.checkout?.delivery?.phone || "";
+          (order && order.payment_status === "paid") ||
+          (order && order.payment_method === "razorpay");
+        const phone = (order && order.phone) || state.checkout?.delivery?.phone || "";
+        const totalAmount = (order && order.total) || state.checkout.total || 0;
         return `
           <nav class="nav">
             <button class="nav__icon nav__back" onclick="back()">${I.back}</button>
@@ -4556,7 +4569,7 @@
             <p class="muted" style="margin:0 0 18px">Your order has been placed successfully.</p>
             <div class="summary" style="text-align:left">
               <div class="summary__row"><span>Order ID</span><span style="font-weight:700;font-size:12px">#${id ? String(id).slice(0, 8).toUpperCase() : "—"}</span></div>
-              <div class="summary__row"><span>Amount</span><span>${money((state.lastOrder && state.lastOrder.total) || state.checkout.total || 0)}</span></div>
+              <div class="summary__row"><span>Amount</span><span>${money(totalAmount)}</span></div>
               <div class="summary__row"><span>Payment</span><span class="badge ${isPaid ? "paid" : "pending"}">${isPaid ? "Paid Online" : "Pending"}</span></div>
             </div>
             <button class="btn btn--primary" style="margin-top:16px" onclick="go('orders',{justOrdered:true,phone:'${phone}'})">View My Orders</button>
