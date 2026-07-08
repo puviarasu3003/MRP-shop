@@ -25,6 +25,8 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
     <script src="./admin_supabase.js"></script>
+    <script src="./helpers.js"></script>
+
 
     <style>
       /* ── Design tokens ───────────────────────────────────────────────── */
@@ -1114,6 +1116,61 @@
       .search-bar:focus {
         border-color: var(--orange);
       }
+
+      /* ── Copy Product Link Button ────────────────────────────────────── */
+      .btn-copy-link {
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        text-align: center;
+        margin-top: 8px;
+        transition: all 0.22s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(255, 106, 0, 0.15);
+      }
+      .btn-copy-link:hover:not(:disabled) {
+        opacity: 0.92;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(255, 106, 0, 0.25);
+      }
+      .btn-copy-link:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      .btn-copy-link:disabled {
+        background: #e2e8f0 !important;
+        background-image: none !important;
+        color: #94a3b8 !important;
+        cursor: not-allowed;
+        opacity: 0.65;
+        box-shadow: none;
+      }
+      .btn-copy-link.loading {
+        background: #475569 !important;
+        background-image: none !important;
+        color: #e2e8f0 !important;
+        cursor: wait;
+        box-shadow: none;
+      }
+      .btn-copy-link.success {
+        background: var(--success) !important;
+        background-image: none !important;
+        color: #fff !important;
+        box-shadow: none;
+      }
+      .btn-copy-link.failure {
+        background: var(--error) !important;
+        background-image: none !important;
+        color: #fff !important;
+        box-shadow: none;
+      }
     </style>
   </head>
 
@@ -1487,6 +1544,8 @@
           </div>
         </div>
 
+
+
         <!-- ── Settings Page ──────────────────────────────────────────── -->
         <div class="page" id="page-settings">
           <div class="top-bar">
@@ -1581,6 +1640,7 @@
             <span class="nav-icon">👥</span>
             <span class="nav-label">Customers</span>
           </button>
+
           <button class="nav-item" data-page="settings">
             <span class="nav-icon">⚙️</span>
             <span class="nav-label">Settings</span>
@@ -1708,9 +1768,16 @@
           </div>
         </div>
         <button class="btn-primary" id="pm-save-btn">Save Product</button>
+        <button type="button" class="btn-copy-link" id="pm-copy-link-btn" disabled>
+          <span class="btn-text">Copy Product Link</span>
+          <span class="btn-spinner spinner" style="display:none; width:16px; height:16px; border-width:2px; border-top-color:#fff; margin:0;"></span>
+        </button>
+        <div id="pm-copy-link-status" style="display:none; padding:10px 12px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; margin-top:8px; text-align:center;"></div>
         <button class="btn-secondary" id="pm-cancel-btn">Cancel</button>
       </div>
     </div>
+
+
 
     <!-- ── Order Detail Modal ──────────────────────────────────────────── -->
     <div class="modal-overlay" id="order-modal">
@@ -2129,6 +2196,7 @@
           if (page === "orders") loadOrdersPage();
           if (page === "items") loadItemsPage();
           if (page === "customers") loadCustomersPage();
+
         }
 
         document
@@ -2878,6 +2946,12 @@
           selectedSizeStocks = {};
           renderSizePreview();
           document.getElementById("pm-save-btn").textContent = "Add Product";
+          
+          // Reset Share elements
+          document.getElementById("pm-copy-link-btn").disabled = true;
+          const statusEl = document.getElementById("pm-copy-link-status");
+          if (statusEl) statusEl.style.display = "none";
+          
           document.getElementById("product-modal").classList.add("open");
         }
 
@@ -2912,6 +2986,12 @@
           });
           renderSizePreview();
           document.getElementById("pm-save-btn").textContent = "Save Changes";
+          
+          // Enable Product link Copying
+          document.getElementById("pm-copy-link-btn").disabled = false;
+          const statusEl = document.getElementById("pm-copy-link-status");
+          if (statusEl) statusEl.style.display = "none";
+          
           document.getElementById("product-modal").classList.add("open");
         }
 
@@ -3036,12 +3116,22 @@
                     ...patch,
                   };
                 toast("✅ Product updated");
+                
+                // Enable copy link & update UI
+                document.getElementById("pm-copy-link-btn").disabled = false;
+                showCopyLinkStatus("success", "✅ Product updated! Ready to copy link.");
               } else {
                 const created = await AdminDB.createProduct(patch);
                 allProductsCache.unshift(created);
                 toast("✅ Product added");
+                
+                // Keep modal open, transition to edit mode so admin can share
+                editingProductId = created.id;
+                document.getElementById("product-modal-title").textContent = "Edit Product";
+                document.getElementById("pm-save-btn").textContent = "Save Changes";
+                document.getElementById("pm-copy-link-btn").disabled = false;
+                showCopyLinkStatus("success", "✅ Product saved! You can now copy the link.");
               }
-              document.getElementById("product-modal").classList.remove("open");
               renderItemsGrid();
             } catch (e) {
               toast("❌ " + adminErrorMessage(e, "Failed to save"));
@@ -3213,6 +3303,78 @@
             loadDashboard();
           });
         }
+
+        /* ── Copy Product Link Button ────────────────────────────────────── */
+        function showCopyLinkStatus(type, message) {
+          const statusEl = document.getElementById("pm-copy-link-status");
+          if (!statusEl) return;
+          
+          statusEl.style.display = "block";
+          statusEl.textContent = message;
+
+          // Reset styles
+          statusEl.style.background = "";
+          statusEl.style.color = "";
+          statusEl.style.border = "";
+
+          if (type === "success") {
+            statusEl.style.background = "var(--success-bg)";
+            statusEl.style.color = "var(--success)";
+            statusEl.style.border = "1.5px solid var(--success)";
+          } else if (type === "error") {
+            statusEl.style.background = "var(--error-bg)";
+            statusEl.style.color = "var(--error)";
+            statusEl.style.border = "1.5px solid var(--error)";
+          } else {
+            statusEl.style.background = "var(--bg)";
+            statusEl.style.color = "var(--ink-soft)";
+            statusEl.style.border = "1.5px solid var(--line)";
+          }
+        }
+
+        // Copy Product Link Button handler
+        document.getElementById("pm-copy-link-btn").addEventListener("click", async () => {
+          if (!editingProductId) return;
+          
+          const btn = document.getElementById("pm-copy-link-btn");
+          const btnText = btn.querySelector(".btn-text");
+          const btnSpinner = btn.querySelector(".btn-spinner");
+          
+          btn.classList.add("loading");
+          btn.disabled = true;
+          if (btnSpinner) btnSpinner.style.display = "inline-block";
+          if (btnText) btnText.textContent = "Copying...";
+          
+          try {
+            const productUrl = `${window.location.origin}/#product?id=${editingProductId}`;
+            await window.AdminHelpers.copyTextToClipboard(productUrl);
+            
+            showCopyLinkStatus("success", "🎉 Link copied to clipboard!");
+            btn.classList.remove("loading");
+            btn.classList.add("success");
+            if (btnText) btnText.textContent = "Copied!";
+            if (btnSpinner) btnSpinner.style.display = "none";
+            
+            setTimeout(() => {
+              btn.classList.remove("success");
+              if (btnText) btnText.textContent = "Copy Product Link";
+              btn.disabled = false;
+            }, 3000);
+          } catch (error) {
+            console.error("Copy link failure:", error);
+            showCopyLinkStatus("error", `❌ Failed to copy: ${error.message}`);
+            btn.classList.remove("loading");
+            btn.classList.add("failure");
+            if (btnText) btnText.textContent = "Failed";
+            if (btnSpinner) btnSpinner.style.display = "none";
+            
+            setTimeout(() => {
+              btn.classList.remove("failure");
+              if (btnText) btnText.textContent = "Copy Product Link";
+              btn.disabled = false;
+            }, 3000);
+          }
+        });
 
         // ── Bootstrap ─────────────────────────────────────────────────────
         init();

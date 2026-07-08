@@ -483,6 +483,7 @@
     fetchCustomerSummaries,
     // Stock
     fetchStockLedger,
+
     // Realtime
     subscribeToOrders,
     subscribeToProducts,
