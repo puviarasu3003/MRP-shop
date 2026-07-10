@@ -92,25 +92,169 @@
         overflow-x: hidden;
       }
 
-      .page {
-        display: none;
-        animation: fade 0.28s ease;
+      .sheet,
+      .pd,
+      .auth-page,
+      .track,
+      .search-wrap,
+      .chips {
+        animation: routeReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
-      .page.active {
-        display: block;
-      }
-
-      @keyframes fade {
+      @keyframes routeReveal {
         from {
           opacity: 0;
-          transform: translateY(8px);
+          transform: translateY(12px);
         }
-
         to {
           opacity: 1;
-          transform: none;
+          transform: translateY(0);
         }
+      }
+
+      /* Entrance keyframes */
+      @keyframes slideFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes scaleFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.1);
+        }
+        80% {
+          transform: scale(0.89);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Staggered entrance for homepage elements */
+      .hero__eyebrow {
+        animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.04s both;
+      }
+      .hero__title {
+        animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+      }
+      .hero__desc {
+        animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+      }
+      .hero__cta {
+        animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+      }
+      .hero__img {
+        animation: scaleFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+      }
+
+      /* Staggered categories */
+      .cat-card {
+        opacity: 0;
+        animation: slideFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .cat-card:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .cat-card:nth-child(2) {
+        animation-delay: 0.08s;
+      }
+      .cat-card:nth-child(3) {
+        animation-delay: 0.12s;
+      }
+      .cat-card:nth-child(4) {
+        animation-delay: 0.16s;
+      }
+      .cat-card:nth-child(5) {
+        animation-delay: 0.2s;
+      }
+      .cat-card:nth-child(6) {
+        animation-delay: 0.24s;
+      }
+
+      /* Staggered why choose cards */
+      .feat-card {
+        opacity: 0;
+        animation: slideFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .feat-card:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .feat-card:nth-child(2) {
+        animation-delay: 0.08s;
+      }
+      .feat-card:nth-child(3) {
+        animation-delay: 0.12s;
+      }
+      .feat-card:nth-child(4) {
+        animation-delay: 0.16s;
+      }
+      .feat-card:nth-child(5) {
+        animation-delay: 0.2s;
+      }
+      .feat-card:nth-child(6) {
+        animation-delay: 0.24s;
+      }
+
+      /* Staggered product cards */
+      .prod-card {
+        opacity: 0;
+        animation: slideFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .prod-card:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .prod-card:nth-child(2) {
+        animation-delay: 0.08s;
+      }
+      .prod-card:nth-child(3) {
+        animation-delay: 0.12s;
+      }
+      .prod-card:nth-child(4) {
+        animation-delay: 0.16s;
+      }
+      .prod-card:nth-child(5) {
+        animation-delay: 0.2s;
+      }
+      .prod-card:nth-child(6) {
+        animation-delay: 0.24s;
+      }
+      .prod-card:nth-child(7) {
+        animation-delay: 0.28s;
+      }
+      .prod-card:nth-child(8) {
+        animation-delay: 0.32s;
+      }
+      .prod-card:nth-child(9) {
+        animation-delay: 0.36s;
+      }
+      .prod-card:nth-child(10) {
+        animation-delay: 0.4s;
+      }
+      .prod-card:nth-child(n + 11) {
+        animation-delay: 0.44s;
       }
 
       /* Navbar */
@@ -190,14 +334,23 @@
         font-weight: 700;
         font-size: 15px;
         transition:
-          transform 0.12s,
-          box-shadow 0.2s,
-          background 0.2s;
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.3s ease,
+          border-color 0.3s ease,
+          color 0.3s ease,
+          opacity 0.2s ease;
         width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px) scale(1.02);
       }
 
       .btn:active {
-        transform: scale(0.98);
+        transform: translateY(1px) scale(0.96) !important;
       }
 
       .btn--primary {
@@ -210,10 +363,41 @@
         box-shadow: 0 8px 22px rgba(255, 106, 0, 0.45);
       }
 
+      .btn--primary::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-25deg);
+        pointer-events: none;
+        animation: shimmerSwipe 3.5s infinite ease-in-out;
+      }
+
+      @keyframes shimmerSwipe {
+        0% {
+          left: -150%;
+        }
+        100% {
+          left: 150%;
+        }
+      }
+
       .btn--whatsapp {
         background: #25d366;
         color: #fff;
         box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+      }
+
+      .btn--whatsapp:hover {
+        box-shadow: 0 8px 22px rgba(37, 211, 102, 0.45);
       }
 
       .btn--ghost {
@@ -363,18 +547,25 @@
         aspect-ratio: 1/1.05;
         background: #eee;
         box-shadow: var(--shadow);
-        transition: transform 0.18s;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .cat-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: var(--shadow-lg);
       }
 
       .cat-card:active {
-        transform: scale(0.97);
+        transform: scale(0.96) translateY(0);
       }
 
       .cat-card img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.4s;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .cat-card:hover img {
@@ -414,13 +605,17 @@
         box-shadow: var(--shadow);
         text-align: center;
         transition:
-          transform 0.18s,
-          box-shadow 0.2s;
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
       .feat-card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-6px) scale(1.02);
         box-shadow: var(--shadow-lg);
+      }
+
+      .feat-card:active {
+        transform: scale(0.97);
       }
 
       .feat-card__icon {
@@ -441,6 +636,11 @@
         stroke: var(--orange);
         fill: none;
         stroke-width: 2;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .feat-card:hover .feat-card__icon svg {
+        transform: scale(1.15) rotate(5deg);
       }
 
       .feat-card__title {
@@ -719,14 +919,20 @@
       }
 
       .pro-footer__links-list {
-        display: none;
-        padding-bottom: 12px;
+        display: flex;
+        max-height: 0;
+        overflow: hidden;
+        padding-bottom: 0;
         flex-direction: column;
         gap: 10px;
+        transition:
+          max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+          padding-bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .pro-footer__links-list.open {
-        display: flex;
+        max-height: 250px;
+        padding-bottom: 12px;
       }
 
       .pro-footer__link {
@@ -859,12 +1065,16 @@
         border: 1.5px solid var(--line);
         border-radius: 999px;
         padding: 11px 16px;
-        transition: border-color 0.2s;
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
       .search-box:focus-within {
         border-color: var(--orange);
         background: #fff;
+        box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.15);
       }
 
       .search-box svg {
@@ -907,7 +1117,22 @@
         background: var(--bg);
         border: 1.5px solid var(--line);
         color: var(--ink-soft);
-        transition: all 0.2s;
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.25s ease,
+          border-color 0.25s ease,
+          color 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .chip:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+        transform: translateY(-1px);
+      }
+
+      .chip:active {
+        transform: scale(0.95);
       }
 
       .chip.active {
@@ -915,6 +1140,11 @@
         color: #fff;
         border-color: transparent;
         box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+        transform: scale(1.04) translateY(-1px);
+      }
+
+      .chip.active:hover {
+        color: #fff;
       }
 
       .prod-grid {
@@ -930,17 +1160,18 @@
         overflow: hidden;
         box-shadow: var(--shadow);
         transition:
-          transform 0.18s,
-          box-shadow 0.2s;
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         cursor: pointer;
       }
 
-      .prod-card:active {
-        transform: scale(0.97);
+      .prod-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: var(--shadow-lg);
       }
 
-      .prod-card:hover {
-        box-shadow: var(--shadow-lg);
+      .prod-card:active {
+        transform: scale(0.96) translateY(0);
       }
 
       .prod-card__img {
@@ -953,11 +1184,11 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.4s;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .prod-card:hover .prod-card__img img {
-        transform: scale(1.05);
+        transform: scale(1.06);
       }
 
       .prod-card__body {
@@ -1094,19 +1325,44 @@
         border: 1.5px solid var(--line);
         background: #fff;
         color: var(--ink);
-        transition: all 0.18s;
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          border-color 0.25s ease,
+          color 0.25s ease,
+          background-color 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
       .size:hover {
         border-color: var(--orange);
         color: var(--orange);
+        transform: translateY(-2px);
+      }
+
+      .size:active {
+        transform: scale(0.92);
       }
 
       .size.active {
         background: linear-gradient(90deg, var(--orange), var(--yellow));
         color: #fff;
         border-color: transparent;
-        box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+        box-shadow: 0 4px 12px rgba(255, 106, 0, 0.25);
+        transform: scale(1.06) translateY(-2px);
+        animation: sizeSelectedPulse 0.3s
+          cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      @keyframes sizeSelectedPulse {
+        0% {
+          transform: scale(0.9) translateY(0);
+        }
+        50% {
+          transform: scale(1.12) translateY(-4px);
+        }
+        100% {
+          transform: scale(1.06) translateY(-2px);
+        }
       }
 
       .size.out {
@@ -1173,10 +1429,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transition:
+          transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .qty__btn:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+        background-color: #fff7ef;
+        transform: scale(1.05);
       }
 
       .qty__btn:active {
-        transform: scale(0.92);
+        transform: scale(0.88);
       }
 
       .qty__val {
@@ -1184,6 +1452,7 @@
         font-weight: 800;
         min-width: 30px;
         text-align: center;
+        transition: transform 0.15s ease;
       }
 
       .pd__bar {
@@ -1200,6 +1469,16 @@
         display: flex;
         gap: 10px;
         align-items: center;
+        animation: barSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      @keyframes barSlideIn {
+        from {
+          transform: translate(-50%, 100%);
+        }
+        to {
+          transform: translate(-50%, 0);
+        }
       }
 
       .pd__bar .btn {
@@ -1221,6 +1500,7 @@
         font-weight: 700;
         margin-bottom: 6px;
         color: var(--ink);
+        transition: color 0.25s ease;
       }
 
       .field input,
@@ -1232,7 +1512,10 @@
         border-radius: 10px;
         background: #fff;
         outline: none;
-        transition: border-color 0.2s;
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          background-color 0.25s ease;
         color: var(--ink);
       }
 
@@ -1240,6 +1523,12 @@
       .field textarea:focus,
       .field select:focus {
         border-color: var(--orange);
+        box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.12);
+        background: #fff;
+      }
+
+      .field:focus-within label {
+        color: var(--orange);
       }
 
       .field.row2 {
@@ -1251,12 +1540,24 @@
       .err {
         font-size: 12px;
         color: var(--error);
-        margin-top: 4px;
-        display: none;
+        margin-top: 0;
+        display: block;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transform: translateY(-6px);
+        transition:
+          max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+          margin-top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .err.show {
-        display: block;
+        opacity: 1;
+        max-height: 24px;
+        transform: translateY(0);
+        margin-top: 4px;
       }
 
       .cart-item {
@@ -1614,7 +1915,9 @@
         z-index: 100;
         opacity: 0;
         pointer-events: none;
-        transition: all 0.3s;
+        transition:
+          opacity 0.2s ease,
+          transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         max-width: 90%;
         text-align: center;
       }
@@ -1630,15 +1933,19 @@
         inset: 0;
         background: rgba(255, 255, 255, 0.85);
         z-index: 200;
-        display: none;
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 12px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease-out;
       }
 
       #loadingOverlay.show {
-        display: flex;
+        opacity: 1;
+        pointer-events: auto;
       }
 
       .spinner {
@@ -1881,16 +2188,23 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0);
         z-index: 1000;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          background-color 0.25s ease,
+          opacity 0.25s ease;
       }
 
       .policy-modal.active {
-        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+        background: rgba(0, 0, 0, 0.7);
       }
 
       .policy-content {
@@ -1903,6 +2217,12 @@
         display: flex;
         flex-direction: column;
         box-shadow: var(--shadow-lg);
+        transform: translateY(16px) scale(0.97);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .policy-modal.active .policy-content {
+        transform: translateY(0) scale(1);
       }
 
       .policy-header {
@@ -2171,6 +2491,42 @@
       .account-grid {
         display: grid;
         gap: 10px;
+      }
+
+      /* SVG path drawing animations for checkmarks */
+      .order-success-icon svg {
+        stroke-dasharray: 40;
+        stroke-dashoffset: 40;
+        animation: drawCheck 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+      }
+
+      .pay-opt__card.active .pay-opt__check svg {
+        display: block;
+        stroke-dasharray: 40;
+        stroke-dashoffset: 40;
+        animation: drawCheck 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes drawCheck {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      /* Add transitional properties to auth field inputs */
+      .auth-field input,
+      .auth-field textarea {
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          background-color 0.25s ease;
+      }
+
+      .auth-field input:focus,
+      .auth-field textarea:focus {
+        border-color: var(--orange);
+        box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.12);
+        background: #fff;
       }
     </style>
   </head>
@@ -4550,12 +4906,15 @@
        ============================================================ */
       register("orderconfirm", (p = {}) => {
         const id = p.id || (state.lastOrder && state.lastOrder.id);
-        const cachedOrder = state.orderHistory.find(o => String(o.id) === String(id));
+        const cachedOrder = state.orderHistory.find(
+          (o) => String(o.id) === String(id),
+        );
         const order = state.lastOrder || cachedOrder;
         const isPaid =
           (order && order.payment_status === "paid") ||
           (order && order.payment_method === "razorpay");
-        const phone = (order && order.phone) || state.checkout?.delivery?.phone || "";
+        const phone =
+          (order && order.phone) || state.checkout?.delivery?.phone || "";
         const totalAmount = (order && order.total) || state.checkout.total || 0;
         return `
           <nav class="nav">
@@ -4564,7 +4923,7 @@
             <button class="nav__icon" onclick="go('home')" aria-label="Home">${I.box}</button>
           </nav>
           <div class="sheet" style="text-align:center;padding-top:40px">
-            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#e8f7ef,#fff);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--success)">${I.check}</div>
+            <div class="order-success-icon" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#e8f7ef,#fff);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--success)">${I.check}</div>
             <h2 style="font-size:22px;font-weight:800;margin:0 0 6px">Thank You!</h2>
             <p class="muted" style="margin:0 0 18px">Your order has been placed successfully.</p>
             <div class="summary" style="text-align:left">
