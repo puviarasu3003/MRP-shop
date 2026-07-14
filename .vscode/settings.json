@@ -1,5 +1,5 @@
 {
-  "liveServer.settings.port": 5510,
+  "liveServer.settings.port": 5513,
   "serviceworker": {
     "src": "/sw.js",
     "scope": "/",
